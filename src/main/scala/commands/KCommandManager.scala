@@ -15,12 +15,14 @@ object KCommandManager {
   )
 
   def interpret(s: String): Unit = {
-    val res = KCommandParser.commandSplitter.parseOnly(s).done.either
+    val res = parseCommand(s)
     res match {
       case Left(_) => println("Input was not a valid command string")
       case Right(ksc: KSplitCommand) => handleSplitCommand(ksc)
     }
   }
+
+  def parseCommand(s: String): Either[String, KSplitCommand] = KCommandParser.commandSplitter.parseOnly(s).done.either
 
   def handleSplitCommand(ksc: KSplitCommand): Unit = {
     getCommandForString(ksc.name) match {
